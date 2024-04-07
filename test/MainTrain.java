@@ -2,6 +2,7 @@ package test;
 
 import test.Tile.Bag;
 
+
 public class MainTrain {
 	
 	public static void testBag() {
