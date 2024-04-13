@@ -1,11 +1,9 @@
 package test;
-
-
-public class Word {
+public class Word{
     private Tile[] wordTile;
     private int row;
     private int col;
-    private boolean vertical = false;
+    private boolean vertical;
 
     public Word(Tile[] wordTile, int row, int col, boolean vertical) {
         this.wordTile = wordTile;

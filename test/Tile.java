@@ -12,6 +12,14 @@ public class Tile {
         this.score = score;
     }
 
+    public char getLetter(){
+        return this.letter;
+    }
+
+    public int getScore(){
+        return this.score;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -40,15 +48,13 @@ public class Tile {
    
     public static class Bag{
         private static Bag bag = null;
-        private int[] tilesQuantity = new int[26];
-        private int[] originialQuantity = new int[26];
-        private Tile[] tileType = new Tile[26];
+        private int[] tilesQuantity;
+        private final int[] originialQuantity;
+        private Tile[] tileType;
 
-        
-        
         private Bag(){
-            tilesQuantity = new int[]{9, 2, 2, 4, 12, 2, 3, 2, 9, 1, 1, 4, 2, 6, 8, 2, 1, 6, 4, 6, 4, 2, 2, 1, 2, 1};
-            System.arraycopy(tilesQuantity, 0, originialQuantity, 0, tilesQuantity.length);
+            originialQuantity = new int[]{9, 2, 2, 4, 12, 2, 3, 2, 9, 1, 1, 4, 2, 6, 8, 2, 1, 6, 4, 6, 4, 2, 2, 1, 2, 1};
+            System.arraycopy(originialQuantity, 0, tilesQuantity, 0, tilesQuantity.length);
             tileType = new Tile[]{
                 new Tile('A', 1),
                 new Tile('B', 3),
@@ -79,7 +85,7 @@ public class Tile {
             };
         }
 
-        int calculateSum(){
+        public int calculateSum(){
             int _sum = 0;
             for(int quantity : this.tilesQuantity){
                 _sum += quantity;
@@ -87,7 +93,7 @@ public class Tile {
             return _sum;
         }
 
-        Tile getRand(){
+        public Tile getRand(){
             int sum = calculateSum();
             if(sum == 0){
                 return null;
@@ -101,7 +107,7 @@ public class Tile {
             return null;
         }
 
-        Tile getTile(char someTile){
+        public Tile getTile(char someTile){
             for(int i = 0 ; i < tileType.length ; i++){
                 if(tileType[i].letter == someTile && tilesQuantity[i] > 0){
                     tilesQuantity[i]--;
@@ -111,7 +117,7 @@ public class Tile {
             return null;
         }
         
-        void put(Tile someTile){
+        public void put(Tile someTile){
             for(int i = 0 ; i < tileType.length ; i++){
                 if(someTile.letter == tileType[i].letter){
                     tilesQuantity[i]++;
@@ -122,11 +128,11 @@ public class Tile {
             }
         }
 
-        int size(){
+        public int size(){
             return calculateSum();
         }
 
-        int[] getQuantities(){
+        public int[] getQuantities(){
             int[] clonedValueArray = tilesQuantity.clone();
 
             return clonedValueArray;
@@ -138,5 +144,5 @@ public class Tile {
             }
             return bag;
         }
-    }
+    } 
 }
