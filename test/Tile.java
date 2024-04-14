@@ -3,7 +3,6 @@ package test;
 import java.util.Objects;
 import java.util.Random;
 
-//Change
 public class Tile {
     private final char letter;
     private final int score;
