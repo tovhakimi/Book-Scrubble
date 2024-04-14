@@ -2,7 +2,7 @@ package test;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-
+//Change
 public class Board {
     private static Board board = null;
     public int wordsCounter = 0; //Parameter that checks the word quantity inside the board

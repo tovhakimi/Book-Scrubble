@@ -1,4 +1,5 @@
 package test;
+//Change
 public class Word{
     private Tile[] wordTile;
     private int row;
