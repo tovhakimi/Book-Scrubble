@@ -1,12 +1,11 @@
 package test;
 
-import java.util.Objects;
+import java.util.Arrays;
 import java.util.Random;
 
-//Change
 public class Tile {
-    private final char letter;
-    private final int score;
+    public final char letter;
+    public final int score;
 
     private Tile(char letter, int score) {
         this.letter = letter;
@@ -45,7 +44,6 @@ public class Tile {
             return false;
         return true;
     }
-
    
     public static class Bag{
         private static Bag bag = null;
@@ -55,7 +53,7 @@ public class Tile {
 
         private Bag(){
             originialQuantity = new int[]{9, 2, 2, 4, 12, 2, 3, 2, 9, 1, 1, 4, 2, 6, 8, 2, 1, 6, 4, 6, 4, 2, 2, 1, 2, 1};
-            System.arraycopy(originialQuantity, 0, tilesQuantity, 0, tilesQuantity.length);
+            tilesQuantity = originialQuantity.clone();
             tileType = new Tile[]{
                 new Tile('A', 1),
                 new Tile('B', 3),
@@ -94,7 +92,7 @@ public class Tile {
             return _sum;
         }
 
-        public Tile getRand(){
+        public Tile getRand(){//
             int sum = calculateSum();
             if(sum == 0){
                 return null;
@@ -135,7 +133,6 @@ public class Tile {
 
         public int[] getQuantities(){
             int[] clonedValueArray = tilesQuantity.clone();
-
             return clonedValueArray;
         }
 
