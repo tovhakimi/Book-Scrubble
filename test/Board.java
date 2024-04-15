@@ -11,11 +11,6 @@ public class Board {
     
     private Board(){
         this.gameBoard = new Tile[15][15];
-        // for(int i = 0 ; i < 15 ; i++){
-        //     for(int j = 0 ; j < 15 ; j++){
-        //         this.gameBoard[i][j] = null;
-        //     }
-        // }
     }
 
     public static Board getBoard(){
@@ -96,64 +91,52 @@ public class Board {
         }
 
     public boolean ifWordLinked(Word word){
-        // Check for existing words adjacent based on word orientation
-        if (word.isVertical()) {
-        // Check above the new word (unless it's the first row)
-        if (word.getRow() > 0 && gameBoard[word.getRow() - 1][word.getCol()] != null) {
-        // Found an existing tile above, check if it connects to the new word's first tile
-            return isConnected(gameBoard[word.getRow() - 1][word.getCol()], word.getWordTile()[0]);
-        }
-        } else {
-            // Check left of the new word (unless it's the first column)
-            if (word.getCol() > 0 && gameBoard[word.getRow()][word.getCol() - 1] != null) {
-            // Found an existing tile to the left, check if it connects to the new word's first tile
-                return isConnected(gameBoard[word.getRow()][word.getCol() - 1], word.getWordTile()[0]);
-            }
-        }
-        // No adjacent tiles found above/left (for vertical/horizontal respectively), 
-        // so the word must connect to an existing word below/right
-            return checkConnectedTilesBelowRight(word, gameBoard);
-        }
+        int row = word.getRow();
+		int col = word.getCol();
+		int firstRow = word.getRow();
+		int firstCol = word.getCol();
+		int lastCol = word.getWordTile().length + firstCol - 1;
+		int lastRow = word.getWordTile().length + firstRow - 1;
+		int i = 0;
+		Tile[] tempTiles = word.getWordTile();
 
-        // Helper function to check if two tiles connect (letters touch)
-        private boolean isConnected(Tile tile1, Tile tile2) {
-            return tile1.getLetter() != tile2.getLetter();
-        }
+		if (word.isVertical()) { // check the relevant situations, if the word is vertical or not
+			while ((tempTiles.length + firstRow) > row) {
+				if (row > 14 || row < 0 || col < 0 || col > 14 || lastCol < 0 || lastRow > 14 || lastRow < 0) {
+					return false;
+				} else if (i < tempTiles.length && tempTiles[i] == null && gameBoard[row][col] == null) { // if the current	                    // check it
+					i++;
+					row++;
+					continue;
+				} else if ((col == 0) && (gameBoard[row][col + 1] != null)) {
+					return true;
+				} else if ((col == 14) && (gameBoard[row][col - 1] != null)) {
+					return true;
+				} else if ((col > 0 && col < 14) && (gameBoard[row][col - 1] != null || gameBoard[row][col + 1] != null)) {
+					return true;
+				}
+				row += 1;
+			}
+		} else {
+			while ((word.getWordTile().length + firstCol) > col) {
+				if (row > 14 || row < 0 || col < 0 || col > 14 || lastCol > 14 || lastCol < 0 || lastRow < 0) {
+					return false;
+				} else if (i < tempTiles.length && tempTiles[i] == null && gameBoard[row][col] == null) {
+					i++;
+					col++;
+					continue;
+				} else if ((row == 0) && (gameBoard[row + 1][col] != null)) {
+					return true;
+				} else if ((row == 14) && (gameBoard[row - 1][col] != null)) {
+					return true;
+				} else if ((row > 0 && row < 14) && (gameBoard[row - 1][col] != null || gameBoard[row + 1][col] != null)) {
+					return true;
+				}
+				col += 1;
+			}
 
-        // Helper function to check connected tiles below/right
-        private boolean checkConnectedTilesBelowRight(Word word, Tile[][] tiles) {
-            if (word.isVertical()) {
-                // Check below each tile of the new word
-                for (int i = 1; i < word.getWordTile().length; i++) {
-                    int rowToCheck = word.getRow() + i;
-                    // Check if the row is within board boundaries and there's a tile
-                        if (rowToCheck < 15 && tiles[rowToCheck][word.getCol()] != null) {
-                            // Found a tile below, check if it connects to the corresponding tile in the new word
-                                if (isConnected(tiles[rowToCheck][word.getCol()], word.getWordTile()[i])) {
-                                    return true;
-                                }
-                            } else {
-                                // Reached the board edge or empty space below, word placement is invalid
-                                return false;
-                            }
-                }
-            } else {
-                // Check right of each tile of the new word
-                for (int j = 1; j < word.getWordTile().length; j++) {
-                    int colToCheck = word.getCol() + j;
-                    // Check if the column is within board boundaries and there's a tile
-                        if (colToCheck < 15 && tiles[word.getRow()][colToCheck] != null) {
-                        // Found a tile to the right, check if it connects to the corresponding tile in the new word
-                            if (isConnected(tiles[word.getRow()][colToCheck], word.getWordTile()[j])) {
-                                return true;
-                            }
-                            } else {
-                                // Reached the board edge or empty space to the right, word placement is invalid
-                                    return false;
-                                }
-                }
-            }
-        return false;
+		}
+		return false;
     }
 
     public boolean requireReplacement(Word word){
@@ -186,7 +169,7 @@ public class Board {
         return newWords;
     }
 
-    void RemoveCurrWords() {
+    private void RemoveCurrWords() {
 		Iterator<Word> iterator = newWords.iterator();
 		while (iterator.hasNext()) {
 			Word w = iterator.next();
@@ -306,6 +289,10 @@ public class Board {
 					col += 1;
 				}
         }
+        for (Word w : newWords) {
+			wordPutScore += getScore(w); // calculate the total score for all created words by the same turn
+		}
+		RemoveCurrWords();
         return wordPutScore;
     }
 

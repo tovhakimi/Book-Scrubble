@@ -1,5 +1,7 @@
 package test;
 
+import java.util.Arrays;
+
 public class Word{
     private Tile[] wordTile;
     private int row;
@@ -7,7 +9,7 @@ public class Word{
     private boolean vertical;
 
     public Word(Tile[] wordTile, int row, int col, boolean vertical) {
-        this.wordTile = wordTile;
+        this.wordTile = Arrays.copyOf(wordTile, wordTile.length);
         this.row = row;
         this.col = col;
         this.vertical = vertical;
