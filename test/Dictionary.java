@@ -26,7 +26,6 @@ public class Dictionary {
         for(String fileName : fileNames){
             addWordsToBloomFilter(fileName);
         }
-
     }
 
     private void addWordsToBloomFilter(String fileName){
